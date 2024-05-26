@@ -1,0 +1,179 @@
+Checked Exceptions
+
+public class MyCheckedException extends Exception {
+    public MyCheckedException(String message) {
+        super(message);
+    }
+}
+
+
+Unchecked Exceptions
+
+public class MyUncheckedException extends RuntimeException {
+    public MyUncheckedException(String message) {
+        super(message);
+    }
+}
+
+IO Streams
+InputStream และ OutputStream
+
+InputStream: คลาสนามธรรมสำหรับการอ่าน byte streams
+java
+Copy code
+try (FileInputStream fis = new FileInputStream("input.txt")) {
+    int data;
+    while ((data = fis.read()) != -1) {
+        System.out.print((char) data);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+OutputStream: คลาสนามธรรมสำหรับการเขียน byte streams
+java
+Copy code
+try (FileOutputStream fos = new FileOutputStream("output.txt")) {
+    fos.write("Hello, World!".getBytes());
+} catch (IOException e) {
+    e.printStackTrace();
+}
+Reader และ Writer
+
+Reader: คลาสนามธรรมสำหรับการอ่าน character streams
+java
+Copy code
+try (FileReader fr = new FileReader("input.txt")) {
+    int data;
+    while ((data = fr.read()) != -1) {
+        System.out.print((char) data);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+Writer: คลาสนามธรรมสำหรับการเขียน character streams
+java
+Copy code
+try (FileWriter fw = new FileWriter("output.txt")) {
+    fw.write("Hello, World!");
+} catch (IOException e) {
+    e.printStackTrace();
+}
+Buffered Streams
+
+BufferedInputStream และ BufferedOutputStream: บัฟเฟอร์ byte streams เพื่อเพิ่มประสิทธิภาพ
+java
+Copy code
+try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream("input.txt"))) {
+    int data;
+    while ((data = bis.read()) != -1) {
+        System.out.print((char) data);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+BufferedReader และ BufferedWriter: บัฟเฟอร์ character streams เพื่อเพิ่มประสิทธิภาพ
+java
+Copy code
+try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+Serializable
+อนุญาตให้ object ถูกแปลงเป็น byte stream ทำให้สามารถบันทึกลงไฟล์หรือส่งผ่านเครือข่ายได้ง่าย
+
+java
+Copy code
+import java.io.*;
+
+public class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String name;
+    private int age;
+
+    // getters และ setters
+}
+Scanner
+ใช้ในการแยกประเภทตัวเลขและสตริงโดยใช้ regular expressions
+
+java
+Copy code
+Scanner scanner = new Scanner(System.in);
+System.out.print("Enter your name: ");
+String name = scanner.nextLine();
+System.out.println("Hello, " + name);
+ตัวอย่างโปรแกรม
+ตัวอย่างการสร้างข้อยกเว้นเอง
+
+java
+Copy code
+public class Main {
+    public static void main(String[] args) {
+        try {
+            validateAge(15);
+        } catch (MyCheckedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void validateAge(int age) throws MyCheckedException {
+        if (age < 18) {
+            throw new MyCheckedException("Age is not valid to vote.");
+        } else {
+            System.out.println("Welcome to vote.");
+        }
+    }
+}
+ตัวอย่างการใช้ Buffered IO Stream
+
+java
+Copy code
+public class BufferedIOExample {
+    public static void main(String[] args) {
+        String data = "Hello, World!";
+        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("output.txt"))) {
+            bos.write(data.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream("output.txt"))) {
+            int dataByte;
+            while ((dataByte = bis.read()) != -1) {
+                System.out.print((char) dataByte);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+ตัวอย่างการใช้ Serialization
+
+java
+Copy code
+public class SerializationExample {
+    public static void main(String[] args) {
+        Person person = new Person();
+        person.setName("John");
+        person.setAge(30);
+
+        // Serialize
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("person.ser"))) {
+            oos.writeObject(person);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Deserialize
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("person.ser"))) {
+            Person deserializedPerson = (Person) ois.readObject();
+            System.out.println("Name: " + deserializedPerson.getName());
+            System.out.println("Age: " + deserializedPerson.getAge());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
