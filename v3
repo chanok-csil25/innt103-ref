@@ -1,0 +1,47 @@
+Scanner reads input from the user and saves it to a file. Then, it reads the data from the file and displays it.
+
+
+import java.io.*;
+import java.util.Scanner;
+
+public class ScannerToFileExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String filename = "userInput.txt";
+
+        // Get user input
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // consume the newline
+
+        // Write user input to a file
+        try (FileOutputStream fos = new FileOutputStream(filename);
+             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+            String data = name + "\n" + age + "\n";
+            bos.write(data.getBytes());
+            System.out.println("User input written to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Read the data from the file
+        try (Scanner fileScanner = new Scanner(new File(filename))) {
+            // Read and print the name
+            if (fileScanner.hasNextLine()) {
+                String fileName = fileScanner.nextLine();
+                System.out.println("Name from file: " + fileName);
+            }
+
+            // Read and print the age
+            if (fileScanner.hasNextInt()) {
+                int fileAge = fileScanner.nextInt();
+                System.out.println("Age from file: " + fileAge);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
