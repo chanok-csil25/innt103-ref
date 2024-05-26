@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class ScannerWithIOExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // รับข้อมูลจากผู้ใช้
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine();  // อ่าน newline character ที่เหลือจาก nextInt
+
+        // เขียนข้อมูลลงไฟล์
+        String filename = "user_data.txt";
+        try (FileOutputStream fos = new FileOutputStream(filename);
+             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+            String data = "Name: " + name + "\nAge: " + age + "\n";
+            bos.write(data.getBytes());
+            System.out.println("Data written to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // อ่านข้อมูลจากไฟล์
+        try (FileInputStream fis = new FileInputStream(filename);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+            System.out.println("Reading data from file:");
+            int data;
+            while ((data = bis.read()) != -1) {
+                System.out.print((char) data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
