@@ -1,0 +1,40 @@
+public class ExceptionPropagationExample {
+
+    public static void main(String[] args) {
+        ExceptionPropagationExample example = new ExceptionPropagationExample();
+        try {
+            example.method1();
+        } catch (Exception e) {
+            System.out.println("Exception caught in main: " + e.getMessage());
+        }
+    }
+
+    public void method1() throws Exception {
+        method2();
+    }
+
+    public void method2() throws Exception {
+        method3();
+    }
+
+    public void method3() throws Exception {
+        throw new Exception("An error occurred in method3");
+    }
+}
+
+Exception Thrown in method3
+
+method3 throws a new Exception.
+Since method3 does not catch the exception, it propagates up to method2.
+Exception Propagates to method2
+
+method2 also does not handle the exception.
+It has throws Exception in its signature, so the exception is propagated up to method1.
+Exception Propagates to method1
+
+method1 also does not handle the exception.
+It has throws Exception in its signature, so the exception is propagated up to the main method.
+Exception Caught in main Method
+
+The main method has a try-catch block.
+The propagated exception is caught here, and a message is printed.
