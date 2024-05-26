@@ -106,7 +106,9 @@ System.out.print("Enter your name: ");
 String name = scanner.nextLine();
 System.out.println("Hello, " + name);
 ตัวอย่างโปรแกรม
-ตัวอย่างการสร้างข้อยกเว้นเอง
+
+
+Custom Exception Example
 
 java
 Copy code
