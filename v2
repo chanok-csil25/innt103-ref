@@ -1,0 +1,35 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class ScannerWithFileExample {
+    public static void main(String[] args) {
+        String filename = "input.txt";
+
+        // เขียนข้อมูลลงไฟล์เพื่อใช้เป็นตัวอย่าง
+        try (FileOutputStream fos = new FileOutputStream(filename);
+             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+            String data = "John\n30\n";
+            bos.write(data.getBytes());
+            System.out.println("Sample data written to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // อ่านข้อมูลจากไฟล์โดยใช้ Scanner
+        try (Scanner scanner = new Scanner(new File(filename))) {
+            // อ่านชื่อ
+            if (scanner.hasNextLine()) {
+                String name = scanner.nextLine();
+                System.out.println("Name: " + name);
+            }
+
+            // อ่านอายุ
+            if (scanner.hasNextInt()) {
+                int age = scanner.nextInt();
+                System.out.println("Age: " + age);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
